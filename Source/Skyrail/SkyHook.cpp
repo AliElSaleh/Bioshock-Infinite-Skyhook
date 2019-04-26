@@ -33,11 +33,13 @@ void USkyHook::TickComponent(const float DeltaTime, const ELevelTick TickType, F
 	// Jump towards skyrail
 	if (!Owner->bCanLaunchToSkyrail && !Owner->bHooked)
 	{	
-		Owner->SetActorLocation(FMath::Lerp(Owner->GetActorLocation(), PointOnRail, Owner->TimeToHookOnRail));
+		Owner->SetActorLocation(FMath::Lerp(Owner->GetActorLocation(), PointOnRail, Owner->TimeToHookOnRail * DeltaTime));
 		
 		if (DistanceToRail < 120.0f && !Owner->bCanLaunchToSkyrail && !Owner->bHooked)
 		{
 			Owner->bHooked = true;
+
+			// Play the hook camera shake
 			GetWorld()->GetFirstPlayerController()->ClientPlayCameraShake(Owner->HookShake, 10.0f);
 
 			// Ride the skyline
@@ -54,7 +56,7 @@ void USkyHook::TickComponent(const float DeltaTime, const ELevelTick TickType, F
 	else if (Owner->bCanLaunchToGround && !Owner->bHooked)
 	{
 		if (!Owner->GetCharacterMovement()->IsMovingOnGround())
-			Owner->SetActorLocation(FMath::Lerp(Owner->GetActorLocation(), PointOnGround, Owner->TimeToHookOnRail));
+			Owner->SetActorLocation(FMath::Lerp(Owner->GetActorLocation(), PointOnGround, Owner->TimeToHookOnRail * DeltaTime));
 		else
 			Owner->bCanLaunchToGround = false;
 	}

@@ -122,7 +122,7 @@ void ASkyline::MovePlayerAlongSkyline()
 			SplineComponent->GetWorldLocationAtTime(Time) - FVector(0, 0, 130)
 		));
 
-		// Speed up/down controls on skyline
+		// Speed up/slow down controls on skyline
 		if (Player->ForwardAxisValue > 0.0f)
 		{
 			Speed += 0.02f;

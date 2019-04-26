@@ -190,7 +190,7 @@ void ASkyrailCharacter::Run()
 
 void ASkyrailCharacter::Quit()
 {
-	FGenericPlatformMisc::RequestExit(false);
+	UKismetSystemLibrary::QuitGame(GetWorld(), UGameplayStatics::GetPlayerController(this, 0), EQuitPreference::Quit, true);
 }
 
 void ASkyrailCharacter::Jump()
