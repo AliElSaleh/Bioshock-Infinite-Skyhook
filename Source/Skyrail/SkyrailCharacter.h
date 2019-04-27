@@ -18,7 +18,10 @@ public:
 	bool bHooked = false;
 
 	UPROPERTY(EditAnywhere, meta=(ToolTip = "How long should the player take to reach the skyrail?"))
-	float TimeToHookOnRail = 0.1f;
+	float TimeToHookOnRail = 5.0f;
+
+	UPROPERTY(EditAnywhere, meta=(ToolTip = "How long should the player take to reach the ground?"))
+	float TimeToLandOnGround = 5.0f;
 
 	UPROPERTY(EditAnywhere)
 	float SkylineSpeed = 1.0f;

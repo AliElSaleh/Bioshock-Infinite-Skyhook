@@ -117,10 +117,7 @@ void ASkyline::MovePlayerAlongSkyline()
 	// Move the player
 	if (Player)
 	{
-		Player->SetActorTransform(FTransform(
-			SplineComponent->GetWorldRotationAtTime(Time),
-			SplineComponent->GetWorldLocationAtTime(Time) - FVector(0, 0, 130)
-		));
+		Player->SetActorLocation(SplineComponent->GetWorldLocationAtTime(Time, true) - FVector(0.0f, 0.0f, 130.0f));
 
 		// Speed up/slow down controls on skyline
 		if (Player->ForwardAxisValue > 0.0f)

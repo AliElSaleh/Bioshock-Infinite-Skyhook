@@ -40,15 +40,14 @@ protected:
 	UPROPERTY(EditAnywhere)
 	USceneComponent* SceneComponent = nullptr;
 
-
 	UPROPERTY(EditAnywhere)
 	class ASkyrailCharacter* Player = nullptr;
 
 	UPROPERTY(EditAnywhere)
 	UMaterial* Material = nullptr;
 
-	float Speed = 1.0f;
-
 	UPROPERTY(VisibleAnywhere)
 	UCurveFloat* AnimAlpha = nullptr;
+
+	float Speed = 1.0f;
 };

@@ -56,7 +56,7 @@ void USkyHook::TickComponent(const float DeltaTime, const ELevelTick TickType, F
 	else if (Owner->bCanLaunchToGround && !Owner->bHooked)
 	{
 		if (!Owner->GetCharacterMovement()->IsMovingOnGround())
-			Owner->SetActorLocation(FMath::Lerp(Owner->GetActorLocation(), PointOnGround, Owner->TimeToHookOnRail * DeltaTime));
+			Owner->SetActorLocation(FMath::Lerp(Owner->GetActorLocation(), PointOnGround, Owner->TimeToLandOnGround * DeltaTime));
 		else
 			Owner->bCanLaunchToGround = false;
 	}
