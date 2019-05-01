@@ -4,6 +4,7 @@
 #include "SkyHook.h"
 #include "Skyline.h"
 #include "Components/InputComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "DrawDebugHelpers.h"
@@ -77,15 +78,18 @@ void ASkyrailCharacter::AddControllerPitchInput(const float Val)
 		FCollisionShape CollisionShape = FCollisionShape::MakeCapsule(100.0f, 1500.0f);
 
 		// Calculate start and end traces
-		const FVector Center = GetActorLocation() + FVector(0, 0, 100); // Eye of character
+		//const FVector Center = GetActorLocation() + FVector(0, 0, 100); // Eye of character
 
+		const FVector Start = GetActorLocation() + FVector(0, 0, 100); // Eye of character
 		const FVector ForwardVector = Controller->GetControlRotation().Vector();
-		const FVector End = Center + ForwardVector * CollisionShape.GetCapsuleHalfHeight();
+		//const FVector End = Center + ForwardVector * CollisionShape.GetCapsuleHalfHeight();
+		const FVector End = Start + ForwardVector * SkyHook->Range;
 
 		if (bDrawRaycast)
-			DrawDebugCapsule(GetWorld(), End, CollisionShape.GetCapsuleHalfHeight(), CollisionShape.GetCapsuleRadius(), FQuat::MakeFromEuler(FVector(GetActorRotation().Roll, Controller->GetControlRotation().Pitch - 90, GetActorRotation().Yaw)), FColor::White, true, 1, 0, 3);
+			DrawDebugLine(GetWorld(), Start, End, FColor::White);
+			//DrawDebugCapsule(GetWorld(), End, CollisionShape.GetCapsuleHalfHeight(), CollisionShape.GetCapsuleRadius(), FQuat::MakeFromEuler(FVector(GetActorRotation().Roll, Controller->GetControlRotation().Pitch - 90, GetActorRotation().Yaw)), FColor::White, true, 1, 0, 3);
 
-		const bool IsHit = GetWorld()->SweepSingleByChannel(HitResult, End, End, FQuat::MakeFromEuler(FVector(GetActorRotation().Roll, Controller->GetControlRotation().Pitch - 90, GetActorRotation().Yaw)), ECC_Visibility, CollisionShape, CollisionParams);
+		const bool IsHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
 
 		if (IsHit)
 		{
@@ -101,15 +105,13 @@ void ASkyrailCharacter::AddControllerPitchInput(const float Val)
 				if (SkyHook)
 				{
 					SkyHook->Skyline = Cast<ASkyline>(HitResult.GetActor());
-					SkyHook->PointOnRail = SkyHook->Skyline->SplineComponent->FindLocationClosestToWorldLocation(HitResult.Location, ESplineCoordinateSpace::World); /*HitResult.Location + FVector(HitResult.GetActor()->GetActorLocation().X - HitResult.Location.X, 
-																		0, 
-																		HitResult.GetActor()->GetActorLocation().Z - HitResult.Location.Z);*/
+					SkyHook->PointOnRail = HitResult.Location;
 				}
 			}
 		}
 	}
 	// Ray cast to the ground
-	else if (Controller->GetControlRotation().Pitch < 360.0f && Controller->GetControlRotation().Pitch > 270.0f && bHooked)
+	else if (Controller->GetControlRotation().Pitch < 340.0f && Controller->GetControlRotation().Pitch > 280.0f && bHooked)
 	{
 		// Create raycast data objects
 		const FCollisionQueryParams CollisionParams;
@@ -118,7 +120,7 @@ void ASkyrailCharacter::AddControllerPitchInput(const float Val)
 		const FVector Start = GetActorLocation() + FVector(0, 0, 60); // Eye of character
 
 		const FVector ForwardVector = Controller->GetControlRotation().Vector();
-		const FVector End = Start + ForwardVector * 4000.f;
+		const FVector End = Start + ForwardVector * SkyHook->Range;
 
 		if (bDrawRaycast)
 			DrawDebugLine(GetWorld(), Start, End, FColor::White, false, 1, 0, 1);
@@ -137,7 +139,7 @@ void ASkyrailCharacter::AddControllerPitchInput(const float Val)
 					UE_LOG(LogTemp, Warning, TEXT("Hit %s: %s"), *HitResult.GetActor()->Tags[0].ToString(), *HitResult.GetActor()->GetName());
 
 				if (SkyHook)
-					SkyHook->PointOnGround = HitResult.Location;
+					SkyHook->PointOnGround = HitResult.Location + FVector(0.0f, 0.0f, GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight());
 			}
 		}
 	}

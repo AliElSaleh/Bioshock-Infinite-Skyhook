@@ -17,14 +17,11 @@ public:
 	bool bCanLaunchToGround = false;
 	bool bHooked = false;
 
-	UPROPERTY(EditAnywhere, meta=(ToolTip = "How long should the player take to reach the skyrail?"))
-	float TimeToHookOnRail = 5.0f;
-
-	UPROPERTY(EditAnywhere, meta=(ToolTip = "How long should the player take to reach the ground?"))
-	float TimeToLandOnGround = 5.0f;
+	UPROPERTY(EditAnywhere, meta=(ToolTip = "How long should the player take to reach the skyrail and land on the ground?"))
+	float TimeToHookAndLand = 2.0f;
 
 	UPROPERTY(EditAnywhere)
-	float SkylineSpeed = 1.0f;
+	bool bDrawRaycast = false;
 
 	float ForwardAxisValue = 0.0f;
 	
@@ -60,6 +57,7 @@ protected:
 	UFUNCTION()
 	void Quit();
 
+	UPROPERTY(EditAnywhere)
 	class USkyHook* SkyHook = nullptr;
 
 	UPROPERTY(EditAnywhere)
@@ -67,9 +65,6 @@ protected:
 	
 	UPROPERTY(EditAnywhere)
 	float RunSpeed = 800.0f;
-
-	UPROPERTY(EditAnywhere)
-	bool bDrawRaycast = false;
 
 	UPROPERTY(EditAnywhere)
 	bool bShowRaycastHits = false;

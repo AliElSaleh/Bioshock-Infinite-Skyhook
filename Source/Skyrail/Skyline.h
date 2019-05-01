@@ -49,5 +49,6 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UCurveFloat* AnimAlpha = nullptr;
 
+	UPROPERTY(EditAnywhere)
 	float Speed = 1.0f;
 };

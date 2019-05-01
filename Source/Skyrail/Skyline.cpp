@@ -77,7 +77,6 @@ void ASkyline::BeginPlay()
 	Super::BeginPlay();
 
 	Player = Cast<ASkyrailCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	Speed = Player->SkylineSpeed;
 
 	// Timeline Initialization
 	FOnTimelineFloat TimelineCallback;
@@ -98,7 +97,7 @@ void ASkyline::BeginPlay()
 
 		AnimAlpha->ResetCurve();
 		AnimAlpha->FloatCurve.AddKey(0, 0);
-		AnimAlpha->FloatCurve.AddKey(SplinePoints.Num(), 1);
+		AnimAlpha->FloatCurve.AddKey(SplinePoints.Num(), SplinePoints.Num());
 	}
 }
 
@@ -117,7 +116,7 @@ void ASkyline::MovePlayerAlongSkyline()
 	// Move the player
 	if (Player)
 	{
-		Player->SetActorLocation(SplineComponent->GetWorldLocationAtTime(Time, true) - FVector(0.0f, 0.0f, 130.0f));
+		Player->SetActorLocation(SplineComponent->GetLocationAtSplineInputKey(Time, ESplineCoordinateSpace::World) - FVector(0.0f, 0.0f, 130.0f));
 
 		// Speed up/slow down controls on skyline
 		if (Player->ForwardAxisValue > 0.0f)
